@@ -1,5 +1,6 @@
 # Hyve Mobile PHP Candidate Project
 
+For notes please check this [my notes](notes.md).
 
 ## Docker
 
