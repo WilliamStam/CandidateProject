@@ -1,0 +1,40 @@
+{
+  "name": "hyve/candidate_project",
+  "description": "Hyve PHP Candidate Project",
+  "minimum-stability": "dev",
+  "license": "proprietary",
+  "version": "0.0.1",
+  "authors": [
+    {
+      "name": "William Stam",
+      "email": "awstam@gmail.com"
+    }
+  ],
+  "config": {
+    "preferred-install": {
+      "*": "dist"
+    },
+    "sort-packages": true,
+    "optimize-autoloader": true,
+    "platform-check": false
+  },
+  "require": {
+    "illuminate/database": "^9.16",
+    "league/config": "^1.1",
+    "league/event": "^2.2",
+    "php-di/php-di": "^6.4",
+    "psr/log": "^1.1",
+    "ramsey/uuid": "4.x-dev",
+    "slim/psr7": "^1.5",
+    "slim/slim": "^4.10",
+    "zeuxisoo/slim-whoops": "^0.7",
+    "zircote/swagger-php": "^4.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "System\\": "system/",
+      "App\\": "app/",
+      "Tests\\": "tests/"
+    }
+  }
+}

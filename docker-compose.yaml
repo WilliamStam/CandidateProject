@@ -1,0 +1,49 @@
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx-container
+    ports:
+      - 8076:80
+    volumes:
+      - .:/code
+      - ./docker/nginx/config/:/etc/nginx/conf.d/
+      - ./docker/nginx/log/:/var/log/nginx/
+    links:
+      - php
+
+  php:
+    build: ./docker/php
+    container_name: php-container
+    volumes:
+      - .:/code
+      - ./docker/composer/vendor:/code/vendor
+    links:
+      - mysql
+
+  composer:
+    image: composer/composer
+    container_name: composer-container
+    volumes:
+      - ./docker/composer:/composer
+      - ./composer.json:/composer/composer.json
+      - .:/code
+    working_dir: /composer
+    command: install
+    depends_on:
+      - php
+      - mysql
+      - nginx
+
+  mysql:
+    image: mysql:8
+    container_name: mysql-container
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_DATABASE: "app"
+      MYSQL_USER: "app"
+      MYSQL_PASSWORD: "app"
+      MYSQL_ROOT_PASSWORD: "hyveroot"
+    volumes:
+      - ./docker/mysql/setup.sql:/docker-entrypoint-initdb.d/setup.sql
+      - ./docker/mysql/data:/var/lib/mysql
