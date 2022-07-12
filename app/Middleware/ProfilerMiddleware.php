@@ -3,15 +3,21 @@
 namespace App\Middleware;
 
 use App\Config;
+use App\Events;
 use App\Profiler;
 use App\Request;
 use App\Response;
-use App\Events;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
 
 class ProfilerMiddleware {
+    /**
+     * @param Config $config
+     * @param Profiler $profiler
+     * @param StreamFactoryInterface $streamFactory
+     * @param Events $events
+     */
     public function __construct(
         protected Config $config,
         protected Profiler $profiler,
@@ -20,6 +26,11 @@ class ProfilerMiddleware {
     ) {
     }
 
+    /**
+     * @param Request $request
+     * @param RequestHandler $handler
+     * @return Response
+     */
     public function __invoke(Request $request, RequestHandler $handler): Response {
         $profiler = $this->profiler->start($request->getUri(), "Route");
         $response = $handler->handle($request);

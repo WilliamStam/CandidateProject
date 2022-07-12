@@ -10,14 +10,29 @@ use System\Repositories\AbstractRepository;
 use System\Repositories\RepositoryCollection;
 
 class SubscriptionRepository extends AbstractRepository {
+    /**
+     * @param Profiler $profiler
+     * @param SubscriptionModel $subscriptionModel
+     */
     function __construct(
         protected Profiler $profiler,
         protected SubscriptionModel $subscriptionModel
     ) {
     }
+
+    /**
+     * @param string|null $search
+     * @param string|array $order
+     * @param string|array|null $level
+     * @param int|false $paginate
+     * @param int $page
+     * @param int|string|null $service
+     * @param int|string|null $msisdn
+     * @return RepositoryCollection
+     */
     function list(
         ?string $search = null,
-        string|array $order = array("id"=>"desc"),
+        string|array $order = array("id" => "desc"),
         string|array $level = null,
         int|false $paginate = 30,
         int $page = 1,
@@ -39,11 +54,11 @@ class SubscriptionRepository extends AbstractRepository {
             });
         }
 
-        if ($service){
-            $records->where("service_id","=",$service);
+        if ($service) {
+            $records->where("service_id", "=", $service);
         }
-        if ($msisdn){
-            $records->where("msisdn","=",$msisdn);
+        if ($msisdn) {
+            $records->where("msisdn", "=", $msisdn);
         }
 
 
@@ -64,10 +79,16 @@ class SubscriptionRepository extends AbstractRepository {
         $profiler->stop();
         return $return;
     }
+
+    /**
+     * @param int|string|null $service
+     * @param int|string|null $msisdn
+     * @return SubscriptionModel
+     */
     function get(
         int|string|null $service = null,
         int|string|null $msisdn = null,
-    ) : SubscriptionModel {
+    ): SubscriptionModel {
         $profiler = $this->profiler->start(__CLASS__ . "::" . __FUNCTION__, __NAMESPACE__);
         $records = SubscriptionsView::query();
         $records->where("service_id", "=", $service);

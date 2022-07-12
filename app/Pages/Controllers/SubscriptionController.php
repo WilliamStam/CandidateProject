@@ -4,10 +4,8 @@
 namespace App\Pages\Controllers;
 
 use App\Config;
-use App\Domain\Msisdn\Repositories\MsisdnRepository;
-use App\Domain\Msisdn\Schemas\MsisdnSchema;
 use App\Domain\Service\Repositories\ServicesRepository;
-use App\Domain\Service\Schemas\ServiceSchema;
+use App\Domain\Subscription\Models\SubscriptionModel;
 use App\Domain\Subscription\Repositories\SubscriptionRepository;
 use App\Domain\Subscription\Schemas\SubscriptionSchema;
 use App\Events;
@@ -16,27 +14,39 @@ use App\Profiler;
 use App\Request;
 use App\Responders\JsonResponder;
 use App\Response;
-use Ramsey\Uuid\Uuid;
 use System\Pagination\PaginationSchema;
-use System\Validation\Rules\MinLength;
-use System\Validation\Rules\Required;
-use System\Validation\Rules\StartsWith;
-use System\Validation\Validator;
+use System\Validation\ValidationFailed;
 
 
 class SubscriptionController {
+    /**
+     * @param Config $config
+     * @param Profiler $profiler
+     * @param JsonResponder $responder
+     * @param Messages $messages
+     * @param SubscriptionRepository $subscriptionRepository
+     * @param SubscriptionModel $subscriptionModel
+     * @param ServicesRepository $servicesRepository
+     * @param Events $events
+     */
     function __construct(
         protected Config $config,
         protected Profiler $profiler,
         protected JsonResponder $responder,
         protected Messages $messages,
         protected SubscriptionRepository $subscriptionRepository,
+        protected SubscriptionModel $subscriptionModel,
         protected ServicesRepository $servicesRepository,
         protected Events $events,
     ) {
     }
 
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return Response
+     */
     public function __invoke(Request $request, Response $response): Response {
         $errors = array();
         $data = array();
@@ -77,62 +87,43 @@ class SubscriptionController {
         );
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return Response
+     */
     public function post(Request $request, Response $response): Response {
         $errors = array();
         $data = array();
 
         $msisdn = $request->getAttribute("GET.msisdn");
         $service_id = $request->getAttribute("GET.service_id");
+
         $data['options'] = array(
             "msisdn" => $msisdn,
             "service_id" => $service_id
         );
 
-
         $service = $this->servicesRepository->get($service_id);
 
-        $errors = (new Validator(array(
-            "service_id" => array(
-                Required::class,
-            ),
-            "msisdn" => array(
-                [StartsWith::class, 27],
-                [MinLength::class, 11],
-                Required::class,
-            )
-        )))->validate(array(
-            "msisdn" => $msisdn,
-            "service_id" => $service_id,
-        ));
-        if (!$service->id) {
-            if (!isset($errors['service_id'])) {
-                $errors['service_id'] = array();
-            }
-            $errors['service_id'][] = "Not a valid service id";
-        }
-
-        $subscription = $this->subscriptionRepository->get($service_id, $msisdn);
-
-        if (!$subscription->uuid && empty($errors)) {
-            $uuid = Uuid::uuid6();
-            $uuid_str = $uuid->toString();
-            $values = array(
-                "uuid" => $uuid_str,
-                "msisdn" => $msisdn,
-                "service_id" => $service_id,
+        try {
+            $this->subscriptionModel->create($msisdn, $service_id, function ($values, $validator) use ($service) {
+                if ($values['service_id'] != $service->id) {
+                    $validator->add("service_id", "Not a valid service id");
+                }
+            });
+        } catch (ValidationFailed $validation) {
+            $this->messages->error("Validation failed");
+            return $this->responder->json(
+                response: $response,
+                data: $data,
+                errors: $validation->getErrors(),
             );
-
-            $errors = $subscription->validate($values);
-            if (empty($errors)) {
-                $subscription = $subscription->save($values);
-
-                $this->events->emit("subscription.created", $subscription);
-                $this->events->emit("subscription.charge", $subscription);
-                $subscription = $this->subscriptionRepository->get($service_id, $msisdn);
-            }
         }
-
+        $subscription = $this->subscriptionRepository->get($service_id, $msisdn);
+        $subscription->charge();
         $data['subscription'] = $subscription->toSchema(new SubscriptionSchema());
+
 
         return $this->responder->json(
             response: $response,
@@ -141,6 +132,11 @@ class SubscriptionController {
         );
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return Response
+     */
     public function put(Request $request, Response $response): Response {
         $errors = array();
         $data = array();
@@ -154,12 +150,14 @@ class SubscriptionController {
 
         $subscription = $this->subscriptionRepository->get($service_id, $msisdn);
 
+
         if (!$subscription->uuid) {
             if (!isset($errors['subscription'])) {
                 $errors['subscription'] = array();
             }
             $errors['subscription'][] = "Subscription doesnt exist";
         }
+
 
         if (!empty($errors)) {
             return $this->responder->json(
@@ -168,10 +166,7 @@ class SubscriptionController {
                 errors: $errors,
             );
         }
-        $data['subscription'] = $subscription->toSchema(new SubscriptionSchema());
-
-        $this->events->emit("subscription.charge", $subscription);
-
+        $subscription->charge();
         $data['subscription'] = $subscription->toSchema(new SubscriptionSchema());
 
         return $this->responder->json(
@@ -181,6 +176,11 @@ class SubscriptionController {
         );
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return Response
+     */
     public function delete(Request $request, Response $response): Response {
         $errors = array();
         $data = array();
@@ -207,10 +207,7 @@ class SubscriptionController {
                 errors: $errors,
             );
         }
-        $data['subscription'] = $subscription->toSchema(new SubscriptionSchema());
-
-        $this->events->emit("subscription.cancel", $subscription);
-
+        $subscription->cancel();
         $data['subscription'] = $subscription->toSchema(new SubscriptionSchema());
 
         return $this->responder->json(

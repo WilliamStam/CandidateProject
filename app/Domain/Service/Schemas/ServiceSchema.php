@@ -9,6 +9,9 @@ use System\Schema\SchemaInterface;
 class ServiceSchema extends AbstractSchema implements SchemaInterface {
 
 
+    /**
+     * @return array
+     */
     function __invoke() {
 
         $item = $this->item;

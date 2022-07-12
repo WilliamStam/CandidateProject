@@ -24,20 +24,27 @@ class Validator implements ValidatorInterface {
         $this->rules[$key][] = $validator;
     }
 
-    public function validate(array $data) {
+    public function validate(array $data, callable $function = null) {
         foreach ($data as $key => $value) {
             foreach ($this->getRules($key) as $rule) {
                 $result = $rule->check($value);
                 foreach ($result->getMessages() as $message) {
-                    if (!isset($this->errors[$key])) {
-                        $this->errors[$key] = array();
-                    }
-                    $this->errors[$key][] = $message;
+                    $this->add($key,$message);
                 }
             }
         }
+        if (is_callable($function)){
+            call_user_func_array($function, array($data,$this));
+        }
         return $this->errors;
     }
+    function add($key,$message){
+        if (!isset($this->errors[$key])) {
+            $this->errors[$key] = array();
+        }
+         $this->errors[$key][] = $message;
+    }
+
 
     function getErrors(){
         return $this->errors;

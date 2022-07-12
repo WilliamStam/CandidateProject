@@ -1,9 +1,8 @@
 <?php
 
+use App\Events;
 use DI\ContainerBuilder;
 use Slim\App;
-
-
 
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -35,7 +34,6 @@ class_alias("\Psr\Http\Message\ResponseInterface", 'App\Response');
 class_alias("\Psr\Http\Message\ServerRequestInterface", 'App\Request');
 
 
-
 // split into files for easier working with them. but they need a $app to work
 (require __DIR__ . '/Middleware.php')($app);
 (require __DIR__ . '/DB.php')($app);
@@ -43,6 +41,6 @@ class_alias("\Psr\Http\Message\ServerRequestInterface", 'App\Request');
 (require __DIR__ . '/Events.php')($app);
 
 
-$app->getContainer()->get(\App\Events::class)->emit("app.start");
+$app->getContainer()->get(Events::class)->emit("app.start");
 
 return $app;

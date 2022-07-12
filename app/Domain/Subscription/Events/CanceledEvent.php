@@ -10,7 +10,12 @@ use League\Event\AbstractEvent;
 use League\Event\EventInterface;
 use League\Event\ListenerInterface;
 
-class CancelEvent extends AbstractEvent implements ListenerInterface {
+class CanceledEvent extends AbstractEvent implements ListenerInterface {
+    /**
+     * @param Messages $messages
+     * @param Profiler $profiler
+     * @param Log $log
+     */
     function __construct(
         protected Messages $messages,
         protected Profiler $profiler,
@@ -18,21 +23,28 @@ class CancelEvent extends AbstractEvent implements ListenerInterface {
     ) {
     }
 
+    /**
+     * @param $listener
+     * @return bool
+     */
     public function isListener($listener) {
         return $listener === $this;
     }
 
+    /**
+     * @param EventInterface $event
+     * @param SubscriptionModel|null $subscription
+     * @return void
+     */
     function handle(EventInterface $event, SubscriptionModel $subscription = null) {
         $profiler = $this->profiler->start(__CLASS__ . "::" . __FUNCTION__, __NAMESPACE__);
-        $subscription->save(array(
-            "canceled_at" => date("Y-m-d H:i:s"),
-            "is_active" => "0"
-        ));
-        $this->messages->success("Subscription Charged");
-        $this->log->info("Subscription Canceled", array(
+
+        $this->messages->success("Subscription Canceled");
+        $this->log->info("Subscription canceled", array(
             "msisdn" => $subscription->msisdn,
             "service" => $subscription->service_id,
-            "uuid" => $subscription->uuid
+            "uuid" => $subscription->uuid,
+            "canceled_at" => $subscription->canceled_at
         ));
         $profiler->stop();
     }

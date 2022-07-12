@@ -11,10 +11,17 @@ use App\Responders\JsonResponder;
 use App\Response;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Psr7\Factory\ResponseFactory;
-use System\Slim\Generic;
+use Throwable;
 
 
 class ErrorMiddleware {
+    /**
+     * @param Errors $errors
+     * @param Events $events
+     * @param Profiler $profiler
+     * @param JsonResponder $jsonResponder
+     * @param ResponseFactory $responseFactory
+     */
     public function __construct(
         protected Errors $errors,
         protected Events $events,
@@ -23,11 +30,17 @@ class ErrorMiddleware {
         protected ResponseFactory $responseFactory
     ) {
     }
+
+    /**
+     * @param Request $request
+     * @param RequestHandler $handler
+     * @return Response
+     */
     public function __invoke(Request $request, RequestHandler $handler): Response {
 
         try {
             $response = $handler->handle($request);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $profiler = $this->profiler->start(__CLASS__ . "::" . __FUNCTION__, __NAMESPACE__);
 
 
@@ -36,7 +49,7 @@ class ErrorMiddleware {
 
             $data = $error->toArray();
 
-            if (!$error->getText()){
+            if (!$error->getText()) {
                 $data['text'] = $e->getMessage();
             }
 
@@ -48,7 +61,7 @@ class ErrorMiddleware {
             $this->events->emit(LogErrorEvent::class, $e);
 
             $response = $this->jsonResponder->json(
-                response: $this->responseFactory->createResponse($code,$error->getText()),
+                response: $this->responseFactory->createResponse($code, $error->getText()),
                 data: $data,
             );
             $profiler->stop();

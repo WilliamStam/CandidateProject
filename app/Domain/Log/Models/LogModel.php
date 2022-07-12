@@ -8,18 +8,30 @@ use System\Models\AbstractModel;
 
 class LogModel extends AbstractModel {
 
+    /**
+     * @param Profiler $profiler
+     */
     public function __construct(
         protected Profiler $profiler
     ) {
         $this->model = new LogsTable();
     }
 
+    /**
+     * @param array $values
+     * @return $this
+     */
     function create(array $values = array()): self {
         $profiler = $this->profiler->start(__CLASS__ . "::" . __FUNCTION__, __NAMESPACE__);
         $this->model = $this->model->create($values);
         $profiler->stop();
         return $this;
     }
+
+    /**
+     * @param array $values
+     * @return $this
+     */
     function save(array $values = array()): self {
         $profiler = $this->profiler->start(__CLASS__ . "::" . __FUNCTION__, __NAMESPACE__);
         $this->model = $this->model->updateOrCreate(
@@ -30,6 +42,10 @@ class LogModel extends AbstractModel {
         return $this;
     }
 
+    /**
+     * @param array $values
+     * @return array
+     */
     function validate(array $values = array()): array {
         $profiler = $this->profiler->start(__CLASS__ . "::" . __FUNCTION__, __NAMESPACE__);
         $errors = $this->model->validate($values);
@@ -37,6 +53,9 @@ class LogModel extends AbstractModel {
         return $errors;
     }
 
+    /**
+     * @return bool|null
+     */
     function delete() {
         $profiler = $this->profiler->start(__CLASS__ . "::" . __FUNCTION__, __NAMESPACE__);
         $return = false;

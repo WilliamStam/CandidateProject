@@ -1,19 +1,23 @@
 <?php
+
 namespace App;
+
 use App\Middleware\CorsMiddleware;
 use App\Middleware\ErrorMiddleware;
 use App\Middleware\InputsMiddleware;
 use App\Middleware\ProfilerMiddleware;
-use App\Middleware\RenderMiddleware;
-use App\Middleware\ReplaceMiddleware;
-use App\Middleware\SystemMiddleware;
-use App\Middleware\TenantMiddleware;
-use App\Middleware\UserMiddleware;
-use App\Templater;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Slim\App;
 use Zeuxisoo\Whoops\Slim\WhoopsMiddleware;
 
 
+/**
+ * @param App $app
+ * @return void
+ * @throws ContainerExceptionInterface
+ * @throws NotFoundExceptionInterface
+ */
 return function (App $app) {
     $container = $app->getContainer();
 
@@ -25,13 +29,13 @@ return function (App $app) {
 
 
     $showWhoops = $container->get(Config::class)->get("dev") ?? false;
-    if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == strtolower('XMLHttpRequest')){
+    if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == strtolower('XMLHttpRequest')) {
         $showWhoops = false;
     }
     if ((bool)$showWhoops) {
         $app->add(new WhoopsMiddleware(array(
             'enable' => true,
-            'editor' => function($file, $line) {
+            'editor' => function ($file, $line) {
                 return "http://localhost:8091?message=%file:%line";
             },
         )));

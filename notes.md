@@ -9,6 +9,8 @@ ive purposefully built this up around the "app" and not the implementation aroun
 
 ## The why and how
 
+![img.png](img.png)
+
 ### Hooks
 Im having fun with this project. Some pretty cool tech using the Events package. I've added some "hooks" (event listeners) for:
 
@@ -93,7 +95,7 @@ Take any object and turn it into an array for outputting the json.
 
 You can parse parameters to the schema as well so if you want to for instance add a "selected" key then you can pass the id to the schema and do a `"selected"=>$item->id == $selected`
 
-I got tired of trying to keep track of all my return json_encode(array(...)) stuff in the past. this seemed like a good idea (all the existing schema type stuff seems sooo heavy to me), now i can't live without it.
+I got tired of trying to keep track of all my return json_encode(array(...)) stuff in the past. this seemed like a good idea (all the existing schema type stuff seems sooo heavy to me), now I can't live without it.
 
 
 
@@ -111,4 +113,4 @@ I got tired of trying to keep track of all my return json_encode(array(...)) stu
 
 I did copy in the validators and some system stuff (collection / pagination) and /update/... - but they are definitely my work and not just copy-pasta from the web.  
 
-I copied some of the docker related things
+I copied some of the docker related things tho. 

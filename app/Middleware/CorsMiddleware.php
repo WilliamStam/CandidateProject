@@ -10,6 +10,11 @@ use Slim\Routing\RouteContext;
 
 final class CorsMiddleware {
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param RequestHandlerInterface $handler
+     * @return ResponseInterface
+     */
     public function __invoke(
         ServerRequestInterface $request,
         RequestHandlerInterface $handler

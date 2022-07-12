@@ -9,6 +9,9 @@ use System\Schema\SchemaInterface;
 class SubscriptionSchema extends AbstractSchema implements SchemaInterface {
 
 
+    /**
+     * @return array
+     */
     function __invoke() {
 
         $item = $this->item;
@@ -18,7 +21,7 @@ class SubscriptionSchema extends AbstractSchema implements SchemaInterface {
             "msisdn" => $item->msisdn,
             "charged_at" => $item->charged_at,
             "canceled_at" => $item->canceled_at,
-            "is_active" => $item->is_active? true : false,
+            "is_active" => $item->is_active ? true : false,
             "created_at" => $item->created_at,
             "updated_at" => $item->updated_at,
             "service_id" => $item->service_id,

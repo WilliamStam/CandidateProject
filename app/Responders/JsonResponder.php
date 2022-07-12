@@ -4,9 +4,8 @@ namespace App\Responders;
 
 use App\Messages;
 use App\Response;
+use Psr\Http\Message\ResponseInterface;
 use System\Responders\ResponderInterface;
-
-use \Psr\Http\Message\ResponseInterface;
 
 
 class JsonResponder implements ResponderInterface {
@@ -14,26 +13,40 @@ class JsonResponder implements ResponderInterface {
     protected $errors = array();
     protected $options = 0;
 
+    /**
+     * @param Messages $messages
+     */
     public function __construct(
         protected Messages $messages
     ) {
     }
 
-    public function json (
+    /**
+     * @param ResponseInterface $response
+     * @param array $data
+     * @param array $errors
+     * @param int $options
+     * @return Response
+     */
+    public function json(
         ResponseInterface $response,
         array $data = array(),
         array $errors = array(),
         int $options = 0
-    ) : Response {
+    ): Response {
         $this->data = $data;
         $this->errors = $errors;
         $this->options = $options;
         return $this->withResponse($response);
     }
 
-    public function withResponse (
+    /**
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     */
+    public function withResponse(
         ResponseInterface $response
-    ): Response {
+    ): ResponseInterface {
 
         $return = array(
 //            "status" => $status,

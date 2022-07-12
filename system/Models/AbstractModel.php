@@ -8,9 +8,9 @@ abstract class AbstractModel {
     use SchemaTrait;
 
     protected $model;
-    protected $updates = array();
 
     function withModel($model): self {
+        // we want a in-de-need_viagra (new object) of the model
         $obj = clone $this;
         $obj->model = $model;
         return $obj;

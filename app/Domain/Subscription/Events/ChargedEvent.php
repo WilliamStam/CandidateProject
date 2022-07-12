@@ -10,7 +10,12 @@ use League\Event\AbstractEvent;
 use League\Event\EventInterface;
 use League\Event\ListenerInterface;
 
-class ChargeEvent extends AbstractEvent implements ListenerInterface {
+class ChargedEvent extends AbstractEvent implements ListenerInterface {
+    /**
+     * @param Messages $messages
+     * @param Profiler $profiler
+     * @param Log $log
+     */
     function __construct(
         protected Messages $messages,
         protected Profiler $profiler,
@@ -18,21 +23,29 @@ class ChargeEvent extends AbstractEvent implements ListenerInterface {
     ) {
     }
 
+    /**
+     * @param $listener
+     * @return bool
+     */
     public function isListener($listener) {
         return $listener === $this;
     }
 
+    /**
+     * @param EventInterface $event
+     * @param SubscriptionModel|null $subscription
+     * @return void
+     */
     function handle(EventInterface $event, SubscriptionModel $subscription = null) {
         $profiler = $this->profiler->start(__CLASS__ . "::" . __FUNCTION__, __NAMESPACE__);
-        $subscription->save(array(
-            "charged_at" => date("Y-m-d H:i:s"),
-            "is_active" => "1"
-        ));
+        // simple enough to make this THE event that does the charging
+        // $subscription->charge();
         $this->messages->success("Subscription Charged");
-        $this->log->info("Subscription Charged", array(
+        $this->log->info("Subscription charged", array(
             "msisdn" => $subscription->msisdn,
             "service" => $subscription->service_id,
-            "uuid" => $subscription->uuid
+            "uuid" => $subscription->uuid,
+            "charged_at" => $subscription->charged_at
         ));
         $profiler->stop();
     }

@@ -16,6 +16,13 @@ use System\Pagination\PaginationSchema;
 
 
 class LogsController {
+    /**
+     * @param Config $config
+     * @param Profiler $profiler
+     * @param JsonResponder $responder
+     * @param Messages $messages
+     * @param LogsRepository $logsRepository
+     */
     function __construct(
         protected Config $config,
         protected Profiler $profiler,
@@ -26,6 +33,11 @@ class LogsController {
     }
 
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return Response
+     */
     public function __invoke(Request $request, Response $response): Response {
         $errors = array();
         $data = array();
@@ -41,7 +53,7 @@ class LogsController {
                 "level" => $request->getAttribute("GET.level") ?? null,
                 "page" => $request->getAttribute("GET.page") ?? 1,
                 "paginate" => $request->getAttribute("GET.paginate") ?? 3,
-                "order" => $request->getAttribute("GET.order") ?? array("id"=>"desc"),
+                "order" => $request->getAttribute("GET.order") ?? array("id" => "desc"),
             );
             $list = $this->logsRepository->list(...$data['options']);
 

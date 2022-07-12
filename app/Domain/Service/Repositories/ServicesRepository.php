@@ -10,15 +10,26 @@ use System\Repositories\AbstractRepository;
 use System\Repositories\RepositoryCollection;
 
 class ServicesRepository extends AbstractRepository {
+    /**
+     * @param Profiler $profiler
+     * @param ServiceModel $serviceModel
+     */
     function __construct(
         protected Profiler $profiler,
         protected ServiceModel $serviceModel
     ) {
     }
 
+    /**
+     * @param string|null $search
+     * @param string|array $order
+     * @param int|false $paginate
+     * @param int $page
+     * @return RepositoryCollection
+     */
     function list(
         ?string $search = null,
-        string|array $order = array("id"=>"desc"),
+        string|array $order = array("id" => "desc"),
         int|false $paginate = 30,
         int $page = 1,
     ): RepositoryCollection {
@@ -51,7 +62,12 @@ class ServicesRepository extends AbstractRepository {
         $profiler->stop();
         return $return;
     }
-    function get(int|string|null $id) : ServiceModel {
+
+    /**
+     * @param int|string|null $id
+     * @return ServiceModel
+     */
+    function get(int|string|null $id): ServiceModel {
         $profiler = $this->profiler->start(__CLASS__ . "::" . __FUNCTION__, __NAMESPACE__);
         $records = ServicesTable::query();
         $records->where("id", "=", $id);

@@ -3,9 +3,9 @@
 use App\Config;
 use App\ErrorHandler;
 use App\Modules;
+use Nette\Schema\Expect;
 use Psr\Container\ContainerInterface;
 use System\Utilities\Strings;
-use Nette\Schema\Expect;
 
 
 return [

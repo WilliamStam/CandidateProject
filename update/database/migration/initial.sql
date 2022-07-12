@@ -16,26 +16,15 @@ INSERT INTO `services` (`id`, `service`) VALUES
 (2, 'youtube');
 
 CREATE TABLE `subscriptions` (
-  `uuid` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `msisdn` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `service_id` int(11) DEFAULT NULL,
-  `charged_at` datetime DEFAULT NULL,
-  `canceled_at` datetime DEFAULT NULL,
-  `is_active` tinyint(1) DEFAULT 0,
-  `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT current_timestamp()
-);
-
-CREATE TABLE `view_subscriptions` (
-`uuid` varchar(40)
-,`msisdn` varchar(11)
-,`charged_at` datetime
-,`canceled_at` datetime
-,`is_active` tinyint(1)
-,`created_at` datetime
-,`updated_at` datetime
-,`service_id` int(11)
-,`service` varchar(100)
+    `uuid` varchar(36) DEFAULT UUID() not null primary key,
+    `msisdn` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `service_id` int(11) DEFAULT NULL,
+    `charged_at` datetime DEFAULT NULL,
+    `canceled_at` datetime DEFAULT NULL,
+    `is_active` tinyint(1) DEFAULT 0,
+    `created_at` datetime DEFAULT current_timestamp(),
+    `updated_at` datetime DEFAULT current_timestamp(),
+    UNIQUE KEY `unique` (`msisdn`,`service_id`)
 );
 
 ALTER TABLE `logs`
@@ -44,10 +33,6 @@ ALTER TABLE `logs`
 ALTER TABLE `services`
   ADD PRIMARY KEY (`id`);
 
-ALTER TABLE `subscriptions`
-  ADD PRIMARY KEY (`uuid`),
-  ADD KEY `msisdn_id` (`msisdn`),
-  ADD KEY `service_id` (`service_id`);
 
 ALTER TABLE `logs`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;

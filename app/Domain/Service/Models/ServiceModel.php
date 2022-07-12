@@ -7,6 +7,9 @@ use App\Tables\ServicesTable;
 use System\Models\AbstractModel;
 
 class ServiceModel extends AbstractModel {
+    /**
+     * @param Profiler $profiler
+     */
     public function __construct(
         protected Profiler $profiler
     ) {
