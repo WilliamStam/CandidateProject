@@ -58,7 +58,7 @@ class ErrorMiddleware {
 
             // emit that an error happened.
             // we pass the exception in so that any listners can do what they want with it. (the unfriendly masked text is ignored)
-            $this->events->emit(LogErrorEvent::class, $e);
+            $this->events->emit("error", $e);
 
             $response = $this->jsonResponder->json(
                 response: $this->responseFactory->createResponse($code, $error->getText()),
