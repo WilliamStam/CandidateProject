@@ -1,5 +1,5 @@
 CREATE TABLE `logs` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT primary key,
   `level` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `log` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `context` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -7,39 +7,26 @@ CREATE TABLE `logs` (
 );
 
 CREATE TABLE `services` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT primary key,
   `service` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 );
 
 
 CREATE TABLE `subscriptions` (
-  `uuid` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `msisdn` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `service_id` int(11) DEFAULT NULL,
-  `charged_at` datetime DEFAULT NULL,
-  `canceled_at` datetime DEFAULT NULL,
-  `is_active` tinyint(1) DEFAULT 0,
-  `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT current_timestamp()
+    `uuid` varchar(36) DEFAULT UUID() not null primary key,
+    `msisdn` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `service_id` int(11) DEFAULT NULL,
+    `charged_at` datetime DEFAULT NULL,
+    `canceled_at` datetime DEFAULT NULL,
+    `is_active` tinyint(1) DEFAULT 0,
+    `created_at` datetime DEFAULT current_timestamp(),
+    `updated_at` datetime DEFAULT current_timestamp(),
+    UNIQUE KEY `unique` (`msisdn`,`service_id`),
+    KEY `msisdn_id` (`msisdn`),
+    KEY `service_id` (`service_id`)
 );
 
 
-ALTER TABLE `logs`
-  ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `services`
-  ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `subscriptions`
-  ADD PRIMARY KEY (`uuid`),
-  ADD KEY `msisdn_id` (`msisdn`),
-  ADD KEY `service_id` (`service_id`);
-
-ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `services`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 
 INSERT INTO `services` (`id`, `service`) VALUES

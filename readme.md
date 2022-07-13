@@ -17,9 +17,17 @@ Eloquent models generation (`/app/Tables`) [click here](words/eloquent_models.md
 
 `git clone https://github.com/WilliamStam/CandidateProject.git`
 
+`cd CandidateProject`
+
 `docker-compose up` should start the services. (The mysql initialization takes a while tho... please hold)
 
+project should be at http://localhost:8069/ 
+
 ## Usage
+
+### OpenAPI
+
+The root of the project should have openapi running. added this in rather quick today so im holding thumbs it works
 
 ### Subscription: `/api/subscription?msisdn=xxxxxx&service_id=y`
 
