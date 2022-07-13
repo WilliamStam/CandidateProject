@@ -8,8 +8,6 @@ date_default_timezone_set('Africa/Johannesburg');
 
 // the updater doesn't use the default values, it only uses these so DB and git stuff are requirements
 return [
-//    "dev"=>true,
-//    "dev"=>false,
      "db"=>array(
         "host"=>"mysql",
         "port"=>3307,

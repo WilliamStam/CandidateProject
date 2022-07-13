@@ -28,7 +28,7 @@
     "slim/psr7": "^1.5",
     "slim/slim": "^4.10",
     "zeuxisoo/slim-whoops": "^0.7",
-    "zircote/swagger-php": "^4.4"
+    "zircote/swagger-php": "4.x-dev"
   },
   "autoload": {
     "psr-4": {

@@ -17,6 +17,8 @@ return function (App $app) {
 
 
     // Application routes
+    $app->get("/", Pages\Controllers\OpenApiController::class);
+
     $app->group("/api", function (RouteCollectorProxy $group) {
         $group->get("", Pages\Controllers\OpenApiController::class);
 
@@ -29,6 +31,10 @@ return function (App $app) {
 
         $group->group("/logs", function (RouteCollectorProxy $sub) {
             $sub->get("[/{log_id}]", Pages\Controllers\LogsController::class);
+        });
+
+        $group->group("/errors", function (RouteCollectorProxy $sub) {
+            $sub->get("[/{code}]", Pages\Controllers\TriggerErrorsController::class);
         });
     });
 

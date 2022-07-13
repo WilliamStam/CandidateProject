@@ -42,7 +42,7 @@ class LogsController {
         $errors = array();
         $data = array();
 
-        $id = $request->getAttribute("PARAMS.log_id");
+        $id = $request->getAttribute("PARAM.log_id");
         if ($id) {
             $details = $this->logsRepository->get($id);
             $data = $details->toSchema(new DetailsSchema());

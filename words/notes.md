@@ -1,15 +1,15 @@
+[<- Back](../readme.md)
 
 ## Logic considerations
 
 ive purposefully built this up around the "app" and not the implementation around the subscription part. Stuff that should be included but keeping it simple since this a demo system include:
 
-- excluding RBAC / user controls / access
-- Subscriptions are simple and not follow on to each other
-- not much validation
+- excluding RBAC / user controls / access  [Authentication / Authorization](authentication.md)
+- Subscriptions are simple and not follow on to each other [subscriptions](subscriptions.md)
 
 ## The why and how
 
-![img.png](img.png)
+
 
 ### Hooks
 Im having fun with this project. Some pretty cool tech using the Events package. I've added some "hooks" (event listeners) for:
@@ -19,6 +19,10 @@ Im having fun with this project. Some pretty cool tech using the Events package.
 - page
   - start
   - end
+- subscriptions
+  - subscription.created
+  - subscription.charged
+  - subscription.canceled
 
 The page end can use the profiler to maybe call something else if the page took too long to load or something (emit to the logger?). This is definitely not part of the task spec but you cant give me a new toy without me taking it for a spin to see what is possible! 
 
@@ -56,7 +60,7 @@ I'm pretty sure my "models" should be called "services" and my /app/tables/ (elo
     - `Messages`: at any point in the life cycle messages can be added that get sent with the payload
     - `Log`: needed a way to log to an event (grrr i hate complicated but this seems to work, "if it's stupid but it works, is it still stupid?")
 - `DB.php`: eloquent is... "interesting"
-- `Events.php`: this should probably be renamed to "Listeners". using phpleage events is new to me so getting it working any way i can
+- `Events.php`: this should probably be renamed to "Listeners". using phpleage events is new to me so getting it working any way i can. this includes an event name and any listeners that are keen. (im pretty sure ive messed this implementation up. seems kinda strange how "not" fixed things are, like how do you know that the `subscription.created` event passes a subscription object in. but at this point over engineering becomes a worry)
 - `Middleware.php`: include all app middleware ain its order etc
 - `Routes.php`: calls the App\Pages\Controllers\... for the various routes. this uses slims routing
 
@@ -101,16 +105,17 @@ I got tired of trying to keep track of all my return json_encode(array(...)) stu
 
 ### Stuff that counts against me here
 
-- Automated tests (it bugs me a lot but i just haven't been able to ace it)
-- Huge docstrings (all impressive code is like half the page of comments)
+- Automated tests (it bugs me a lot but i just haven't been able to ace it, im really hoping that my next role will help me achieve these)
+- Huge docstrings (all impressive code is like half the page of comments, mine are just idea generated)
 - Haven't found a way to have decent typing for "Collections" yet (like say typescript ObjectType[] ). 
-- There's a great chance im using terms wrong, like repositories/models/services, ive looked at other frameworks and opinionated pieces and tried to stick with what makes sense to me. 
+- There's a great chance im using terms wrong, like repositories/models/services, ive looked at other frameworks and opinionated pieces and tried to stick with what makes sense to me, very open to changing tho. 
 
 
 --------------
 
-# Confession
+# Copy pasta
 
-I did copy in the validators and some system stuff (collection / pagination) and /update/... - but they are definitely my work and not just copy-pasta from the web.  
+I did copy in the validators and some system stuff (collection / pagination) and /update/...  from my other projects - but they are definitely my work and not just copy-pasta from the web.  
 
-I copied some of the docker related things tho. 
+i took the opportunity to take what ive done in the past and re-write it as a green fields project (which was fun). 
+

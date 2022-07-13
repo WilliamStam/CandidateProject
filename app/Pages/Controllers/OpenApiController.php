@@ -8,6 +8,16 @@ use App\Profiler;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
+/**
+ * @OA\Info(title="My First API", version="0.1")
+ */
+
+/**
+ * @OA\Get(
+ *     path="/api/resource.json",
+ *     @OA\Response(response="200", description="An example resource")
+ * )
+ */
 
 class OpenApiController {
 
@@ -18,6 +28,7 @@ class OpenApiController {
     }
 
 
+
     public function __invoke(Request $request, Response $response) {
         $data = array();
 
@@ -25,18 +36,12 @@ class OpenApiController {
         $data['base'] = $path;
 
 
-//         $this->system->debug($request->getUri());
 
 
-        $format = "swagger";
-        if (basename($request->getUri()->getPath()) == "api.json") {
-            $format = "json";
-        }
-        if (basename($request->getUri()->getPath()) == "api.yaml") {
-            $format = "yaml";
-        }
+//        $openapi = \OpenApi\Generator::scan([LogsController::class]);
+//        header('Content-Type: application/x-yaml');
+//        echo $openapi->toYaml();
 
-        echo "hi";
 
 //        return match ($format) {
 //            "json" => $this->responder->withJson(

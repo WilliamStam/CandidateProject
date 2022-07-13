@@ -17,8 +17,11 @@ return [
         $root = dirname(__DIR__);
         $storage = Strings::fixDirSlashes($root . DIRECTORY_SEPARATOR . "/storage");
 
+        // this is just for the demo
+        $dev_mode = $_GET['dev'] ? true : false;
+
         $config = new Config(array(
-            "dev" => Expect::bool()->default(false),
+            "dev" => Expect::bool()->default($dev_mode),
             "storage" => Expect::string()->default($storage),
             "logs" => Expect::structure(array(
                 "errors" => Expect::string()->default(Strings::fixDirSlashes($storage . "/logs"))
