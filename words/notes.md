@@ -5,7 +5,7 @@
 ive purposefully built this up around the "app" and not the implementation around the subscription part. Stuff that should be included but keeping it simple since this a demo system include:
 
 - excluding RBAC / user controls / access  [Authentication / Authorization](authentication.md)
-- Subscriptions are simple and not follow on to each other [subscriptions](subscriptions.md)
+- Subscriptions are simple and not follow on to each other [subscription](subscription.md)
 
 ## The why and how
 
