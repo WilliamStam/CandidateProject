@@ -12,7 +12,7 @@ CREATE TABLE `services` (
 );
 
 CREATE TABLE `subscriptions` (
-    `uuid` BINARY(16) DEFAULT (uuid_to_bin(uuid())) not null primary key,
+    `uuid` VARCHAR(50) DEFAULT (uuid()) not null primary key,
     `msisdn` VARCHAR(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
     `service_id` INT DEFAULT NULL,
     `charged_at` DATETIME DEFAULT NULL,
