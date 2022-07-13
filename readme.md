@@ -23,6 +23,8 @@ Eloquent models generation (`/app/Tables`) [click here](words/eloquent_models.md
 
 project should be at http://localhost:8069/ 
 
+Performance will take a hit because of the using the cloned directory as a volume instead of inserting the code into the docker image. My intentions for this was to allow the code to be inspected without needing to ps exec bash the container itself. 
+
 ## Usage
 
 ### OpenAPI
