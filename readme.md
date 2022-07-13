@@ -44,17 +44,18 @@ The root of the project should have openapi running. added this in rather quick 
 
 ### System Logs: `/api/logs` and `api/logs/x`
 
+Any errors while in prod mode, subscription events etc are added in here. Both the endpoints use `GET`. The details of the event adds the context data to the output. 
 
 ## Dev mode
 
-dev mode uses Whoops for the error handler. the docker container includes the default mode which is production (dev = false) so it will hide the error messages and show friendly ones (or not friendly mwhahaha) these are3 controlled in the `/app/Container.php` file. ive added a query string switch if you want to toggle between dev mode and prod mode. very creatively `?dev=1` (or `?dev=you+are+hired`) - anything `dev=...`
+dev mode uses Whoops for the error handler. the docker container includes the default mode which is production (dev = false) so it will hide the error messages and show friendly ones (or not friendly mwhahaha) these are controlled in the `/app/Container.php` file. ive added a query string switch if you want to toggle between dev mode and prod mode. very creatively `?dev=1` (or `?dev=you+are+hired`) - anything `dev=...`
 
 
 ### Profiler
 
 use the `?dev=1` option on any of the endpoints and it will include the full profiler as a `PROFILER` key to the json (so when working with the system the profiler is always in your face)
 
-The profiler keeps track of all items added in and how long they took to run and the memory used. In a real app i also calculate offsets n stuff to create a waterfall effect in my front end when displaying the profiler. 
+The profiler keeps track of all items added in and how long they took to run and the memory used. In a real app i also calculate offsets n stuff to create a waterfall effect in my front end when displaying the profiler. As an example:
 
 ![words/profiler.png](words/profiler.png)
 

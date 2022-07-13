@@ -8,7 +8,7 @@ class SubscriptionsView extends AbstractTable {
     public $fillable = [
         "uuid", "msisdn", "charged_at", "canceled_at", "is_active", "created_at", "updated_at", "service_id", "service"
     ];
-    protected $table = 'VIEW_subscriptions';
+    protected $table = 'view_subscriptions';
     protected $rules = array(
         'uuid' => array(
             [Rules\MaxLength::class, 36]
