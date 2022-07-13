@@ -18,9 +18,7 @@ services:
     volumes:
       - .:/code
       - ./docker/composer/vendor:/code/vendor
-      - type: bind
-        source: ./docker/config.php
-        target: /code/config.php
+
     links:
       - mysql
 
@@ -29,8 +27,13 @@ services:
     container_name: composer-container
     volumes:
       - ./docker/composer:/composer
-      - ./composer.json:/composer/composer.json
       - .:/code
+      - type: bind
+        source: ./docker/config.php
+        target: /code/config.php
+      - type: bind
+        source: ./composer.json
+        target: /code/composer.json
     working_dir: /composer
     command: install
     depends_on:
