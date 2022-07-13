@@ -3,7 +3,7 @@ services:
     image: nginx:latest
     container_name: nginx-container
     ports:
-      - 8076:80
+      - 8069:80
     volumes:
       - .:/code
       - ./docker/nginx/config/:/etc/nginx/conf.d/

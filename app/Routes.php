@@ -17,12 +17,13 @@ return function (App $app) {
 
 
     // Application routes
-    $app->get("/", Pages\Controllers\OpenApiController::class);
+    $app->get("/", OpenAPI\OpenApiController::class);
+    $app->get("/api.yaml", [OpenAPI\OpenApiController::class,"api"]);
 
     $app->group("/api", function (RouteCollectorProxy $group) {
-        $group->get("", Pages\Controllers\OpenApiController::class);
+        $group->get("", OpenAPI\OpenApiController::class);
 
-        $group->group("/subscription[/{msisdn}]", function (RouteCollectorProxy $sub) {
+        $group->group("/subscription", function (RouteCollectorProxy $sub) {
             $sub->get("", Pages\Controllers\SubscriptionController::class);
             $sub->post("", [Pages\Controllers\SubscriptionController::class, "post"]);
             $sub->put("", [Pages\Controllers\SubscriptionController::class, "put"]);

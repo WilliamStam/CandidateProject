@@ -1,0 +1,158 @@
+openapi: 3.0.0
+info:
+  title: HyveMobile Candidate Project
+  version: '1.0'
+servers:
+  - url: 'http://localhost:8069'
+paths:
+  /api/subscription:
+    parameters: []
+    get:
+      summary: ''
+      operationId: get-api-subscription
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+      parameters:
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/msisdn'
+      description: Fetch the current subscription for the service id and msisdn combination
+      tags:
+        - Subscription
+    post:
+      summary: ''
+      operationId: post-api-subscription
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/msisdn'
+      description: 'Create if doesnt exist, and then charge the service msisdn combination'
+      tags:
+        - Subscription
+    put:
+      summary: ''
+      operationId: put-api-subscription
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/msisdn'
+      description: charge the service msisd combination
+      tags:
+        - Subscription
+    delete:
+      summary: ''
+      operationId: delete-api-subscription
+      responses:
+        '200':
+          description: OK
+      description: Cancel the subscription for the service msisdn combination
+      tags:
+        - Subscription
+      parameters:
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/msisdn'
+  /api/logs:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - Logs
+      responses: {}
+      operationId: get-api-logs
+  '/api/logs/{log_id}':
+    get:
+      summary: Your GET endpoint
+      tags:
+        - Logs
+      responses: {}
+      operationId: get-api-logs
+    parameters:
+      - schema:
+          type: string
+          example: '4'
+        name: log_id
+        in: path
+        required: true
+        description: The id of the log item
+  '/api/errors/{code}':
+    parameters:
+      - schema:
+          type: string
+          example: '404'
+        name: code
+        in: path
+        required: true
+        description: The error code
+    get:
+      summary: Your GET endpoint
+      responses: {}
+      operationId: get-api-errors-code
+      parameters: []
+      tags:
+        - Errors
+components:
+  schemas:
+    Subscription:
+      type: object
+      x-examples:
+        example-1:
+          uuid: 85de616e-0218-11ed-9b9b-00ffd90f6375
+          msisdn: '27835029157'
+          charged_at: '2022-07-12 21:58:16'
+          canceled_at: null
+          is_active: true
+          created_at: '2022-07-12T19:26:20.000000Z'
+          updated_at: '2022-07-12T19:58:16.000000Z'
+          service_id: '2'
+          service: youtube
+      properties:
+        uuid:
+          type: string
+        msisdn:
+          type: string
+        charged_at:
+          type:
+            - string
+            - 'null'
+        canceled_at:
+          type:
+            - string
+            - 'null'
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+        updated_at:
+          type:
+            - string
+            - 'null'
+        service_id:
+          type: integer
+        service:
+          type: string
+  parameters:
+    service_id:
+      name: service_id
+      in: query
+      required: false
+      schema:
+        type: string
+        example: '1'
+      description: The service id
+    msisdn:
+      name: msisdn
+      in: query
+      required: false
+      schema:
+        type: string
+        example: '27123456789'
+        minLength: 11
+        maxLength: 11
+      description: The msisdn starting with 27

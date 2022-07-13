@@ -18,13 +18,7 @@ use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpUnauthorizedException;
 use System\Pagination\PaginationSchema;
 
-
 class TriggerErrorsController {
-
-    function __construct(
-        protected JsonResponder $responder,
-    ) {
-    }
 
 
     /**
@@ -32,6 +26,7 @@ class TriggerErrorsController {
      * @param Response $response
      * @return Response
      */
+
     public function __invoke(Request $request, Response $response) {
         $errors = array();
         $data = array();

@@ -10,21 +10,23 @@ ive purposefully built this up around the "app" and not the implementation aroun
 ## The why and how
 
 
+### Hooks / Events
 
-### Hooks
-Im having fun with this project. Some pretty cool tech using the Events package. I've added some "hooks" (event listeners) for:
+I'm having fun with this project. Some pretty cool tech using the Events package. I've added some "hooks" (event listeners) for:
 
 - Logs
 - Errors (errors call logs in any-case)
-- page
-  - start
-  - end
-- subscriptions
+- page:
+  - page.start
+  - page.end
+- subscriptions:
   - subscription.created
   - subscription.charged
   - subscription.canceled
 
-The page end can use the profiler to maybe call something else if the page took too long to load or something (emit to the logger?). This is definitely not part of the task spec but you cant give me a new toy without me taking it for a spin to see what is possible! 
+The page end can use the profiler to maybe call something else if the page took too long to load or something (emit to the logger?). This is definitely not part of the task spec, but you can't give me a new toy without me taking it for a spin to see what is possible! 
+
+i know the spec sheet says use the events to persist the charged / created but i feel that if you hit an endpoint that should be the primary action, the result of the primary action (charging a subscription) should then be sent out to the event system for any interested listeners. (so more like hooks). im happy to change my mind on this, it just seems odd to hit a charged endpoint and then rely on a "possible" event to actually do the charging or any race conditions that might occur. since php doesn't use object references (other than & but that makes me shiver in fear) and the events' system can basically only "stop" future events and not return the result it seems that at each event you would need to "get" the state of the previous event's changes. (like creating a subscription in the event, how do you get the "uuid" back from the event?)  
 
 
 # Structure
@@ -101,19 +103,20 @@ You can parse parameters to the schema as well so if you want to for instance ad
 
 I got tired of trying to keep track of all my return json_encode(array(...)) stuff in the past. this seemed like a good idea (all the existing schema type stuff seems sooo heavy to me), now I can't live without it.
 
+--------------
 
+...stop reading now...
 
-### Stuff that counts against me here
+## Stuff that counts against 
 
 - Automated tests (it bugs me a lot but i just haven't been able to ace it, im really hoping that my next role will help me achieve these)
 - Huge docstrings (all impressive code is like half the page of comments, mine are just idea generated)
 - Haven't found a way to have decent typing for "Collections" yet (like say typescript ObjectType[] ). 
+- i forgot how to capitalize the first char of my sentences and use punctuation correctly, i blame the education system naturally, it's not ME 
 - There's a great chance im using terms wrong, like repositories/models/services, ive looked at other frameworks and opinionated pieces and tried to stick with what makes sense to me, very open to changing tho. 
 
 
---------------
-
-# Copy pasta
+## Copy pasta
 
 I did copy in the validators and some system stuff (collection / pagination) and /update/...  from my other projects - but they are definitely my work and not just copy-pasta from the web.  
 

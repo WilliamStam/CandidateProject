@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HyveMobile Candidate Project</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.4.1/swagger-ui.css" integrity="sha512-sFCybMLlCEgtHSq/iUUG/HL4PKfg5l/qlA2scyRpDWTZU8hWOomj/CrOTxpi9+w8rODDy+crxi2VxhLZ+gehWg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+</head>
+<body>
+<div id="swagger-ui"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.4.1/swagger-ui-bundle.js" integrity="sha512-kJYUnv854PUV6JKCNRiq7b5/oS8OUdo36o/LqFu+7SRnc1ZVfvwx5+wba9ttAgdLLYo3+j68hV9VdQxEepd5mw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.4.1/swagger-ui-standalone-preset.js" integrity="sha512-/QlN2WRsBIIUCIk4CaoZVYlnoCmnV2WvJnYA7SdNGaue2vGoZaFIykJwTUfITxyL88tCocP22zWbId3Ivf9Gmw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script>
+    window.onload = function () {
+
+        // Begin Swagger UI call region
+        const ui = SwaggerUIBundle({
+            "dom_id": "#swagger-ui",
+            deepLinking: true,
+            presets: [
+                SwaggerUIBundle.presets.apis,
+                SwaggerUIStandalonePreset
+            ],
+            plugins: [
+                SwaggerUIBundle.plugins.DownloadUrl
+            ],
+
+            queryConfigEnabled: true,
+            url: "./api.yaml",
+        });
+
+        window.ui = ui;
+    };
+</script>
+</body>
+</html>
