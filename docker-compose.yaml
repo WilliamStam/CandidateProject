@@ -17,6 +17,9 @@ services:
     volumes:
       - .:/code
       - ./docker/composer/vendor:/code/vendor
+      - type: bind
+          source: ./docker/config.php
+          target: /code/config.php
     links:
       - mysql
 
