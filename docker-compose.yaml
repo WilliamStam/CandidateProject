@@ -1,3 +1,4 @@
+version: "3.7"
 services:
   nginx:
     image: nginx:latest
@@ -18,8 +19,8 @@ services:
       - .:/code
       - ./docker/composer/vendor:/code/vendor
       - type: bind
-          source: ./docker/config.php
-          target: /code/config.php
+        source: ./docker/config.php
+        target: /code/config.php
     links:
       - mysql
 
