@@ -29,9 +29,6 @@ services:
       - ./docker/composer:/composer
       - ./composer.json:/composer/composer.json
       - .:/code
-      - type: bind
-        source: ./docker/config.php
-        target: /code/config.php
     working_dir: /composer
     command: install
     depends_on:

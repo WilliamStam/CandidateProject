@@ -27,11 +27,11 @@ return [
                 "errors" => Expect::string()->default(Strings::fixDirSlashes($storage . "/logs"))
             )),
             "db" => Expect::structure(array(
-                "host" => Expect::string()->default('localhost'),
-                "port" => Expect::int()->min(1)->max(65535),
-                "database" => Expect::string(),
-                "username" => Expect::string(),
-                "password" => Expect::string(),
+                "host" => Expect::string()->default('mysql'),
+                "port" => Expect::int()->min(1)->max(65535)->default(3306),
+                "database" => Expect::string()->default('app'),
+                "username" => Expect::string()->default('app'),
+                "password" => Expect::string()->default('app'),
                 'flags' => Expect::array()->default([
                     PDO::ATTR_PERSISTENT => false,
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
