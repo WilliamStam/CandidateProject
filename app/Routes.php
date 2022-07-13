@@ -46,23 +46,6 @@ return function (App $app) {
     });
 
 
-    $app->get('/update', function ($request, $response) {
-        header('Content-Type: text/event-stream');
-        header('Cache-Control: no-cache');
-        chdir(dirname("../update"));
-
-        $cmd = 'php update.php 2>&1';
-        while (@ob_end_flush()) ;
-
-        $proc = popen($cmd, 'r');
-        while (!feof($proc)) {
-            echo fread($proc, 4096);
-            @ flush();
-        }
-        exit();
-    });
-
-
     $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/api/{path:.*}', function ($request, $response) {
         throw new HttpNotFoundException($request);
     });
